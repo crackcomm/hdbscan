@@ -1,0 +1,15 @@
+(library
+ (name hdbscan)
+ (public_name hdbscan)
+ (libraries
+   core
+   ppx_expect.evaluator)
+ (foreign_stubs
+  (language cxx)
+  (names dendrogram hdbscan hdbscanOcaml)
+   (include_dirs %{project_root}/include)
+  (flags -O3 -std=c++17 -fPIC -Wno-attributes))
+ (c_library_flags :standard -lstdc++)
+ (inline_tests)
+ (preprocess
+  (pps ppx_jane ppx_expect)))

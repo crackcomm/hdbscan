@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "ocaml": "4.14.0",
+    "@opam/dune": "3.0.3",
+    "@opam/core": "v0.15.0",
+    "@opam/ppx_jane": "*"
+  },
+  "resolutions": {
+    "ocaml": "esy-ocaml/ocaml#393bd25"
+  },
+  "devDependencies": {
+    "@opam/easy-format": "1.3.2",
+    "@opam/ocamlformat": "0.21.0",
+    "@opam/ocamlformat-rpc": "0.21.0",
+    "@opam/ocaml-lsp-server": "1.11.1"
+  }
+}
