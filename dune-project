@@ -1,5 +1,7 @@
 (lang dune 2.7)
 
+(name hdbscan)
+
 (formatting
  (enabled_for ocaml))
 

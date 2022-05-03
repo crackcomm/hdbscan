@@ -28,6 +28,7 @@ extern "C" {
 #include <caml/bigarray.h>
 #include <caml/fail.h>
 #include <caml/memory.h>
+#include <caml/alloc.h>
 }
 
 #define PAGE_SIZE 4096
@@ -35,6 +36,7 @@ extern "C" {
 extern "C" {
 value hdbscan_graph_ml(value vpoints, value vmin_pts) {
   CAMLparam2(vpoints, vmin_pts);
+  CAMLlocal1(result);
 
   const struct caml_ba_array *ba = Caml_ba_array_val(vpoints);
   assert(ba->num_dims == 2);
@@ -130,6 +132,19 @@ value hdbscan_graph_ml(value vpoints, value vmin_pts) {
                           return e1.weight < e2.weight;
                         });
 
+  result = caml_alloc(output.size(), 0);
+
+  for (size_t i = 0; i < output.size(); ++i) {
+    value tup = caml_alloc(3, 0);
+    Store_field(tup, 0, Val_int(output[i].u));
+    Store_field(tup, 1, Val_int(output[i].v));
+    Store_field(tup, 2, caml_copy_double(output[i].weight));
+    Store_field(result, i, tup);
+  }
+
+  CAMLreturn(result);
+
+  /*
   double *block = NULL;
   size_t block_size = output.size() * 3 * sizeof(double);
 
@@ -147,6 +162,7 @@ value hdbscan_graph_ml(value vpoints, value vmin_pts) {
   CAMLreturn(
       caml_ba_alloc_dims(CAML_BA_FLOAT64 | CAML_BA_C_LAYOUT | CAML_BA_MANAGED,
                          2, block, output.size(), 3L));
+  */
   /*
   parlay::sequence<pargeo::dendroNode> dendro = pargeo::dendrogram(output, n);
 

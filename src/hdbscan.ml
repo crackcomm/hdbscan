@@ -17,11 +17,13 @@
    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. *)
 
+open Core
 open Bigarray
 
 type arr = (float, float64_elt, c_layout) Array2.t
+type edges = (int * int * float) array [@@deriving sexp]
 
-external hdbscan_graph : arr -> int -> arr = "hdbscan_graph_ml"
+external hdbscan_graph : arr -> int -> edges = "hdbscan_graph_ml"
 
 let hdbscan_graph ~min_pts points = hdbscan_graph points min_pts
 
@@ -41,37 +43,13 @@ let%expect_test "hdbscan_graph" =
        ; [| 3.13; 3.43 |]
       |]
   in
-  let print_ba ba =
-    let open Core in
-    let len1 = Array2.dim1 ba - 1 in
-    let print_dim2 i1 =
-      if i1 = 0 then printf "[" else printf " [";
-      let len = Array2.dim2 ba - 1 in
-      for i2 = 0 to len do
-        if i2 = len
-        then
-          if i1 = len1
-          then printf "%.4f]]\n" ba.{i1, i2}
-          else printf "%.4f]\n" ba.{i1, i2}
-        else printf "%.4f " ba.{i1, i2}
-      done
-    in
-    printf "[";
-    for i1 = 0 to len1 do
-      print_dim2 i1
-    done
-  in
   let out = hdbscan_graph ~min_pts:3 input in
-  print_ba out;
+  print_s [%sexp (out : edges)];
   (* Output from Python library. *)
   [%expect
     {|
-    [[6.0000 7.0000 0.0361]
-     [7.0000 8.0000 0.0361]
-     [0.0000 1.0000 0.5000]
-     [1.0000 2.0000 0.5000]
-     [4.0000 5.0000 0.5000]
-     [3.0000 4.0000 0.5000]
-     [2.0000 5.0000 0.7071]
-     [1.0000 7.0000 2.2526]] |}]
+    ((6 7 0.036055512754640105) (7 8 0.036055512754640105)
+     (0 1 0.49999999999999983) (1 2 0.49999999999999983)
+     (4 5 0.49999999999999983) (3 4 0.49999999999999983)
+     (2 5 0.70710678118654757) (1 7 2.25257630281418)) |}]
 ;;
