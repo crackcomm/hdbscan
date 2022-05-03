@@ -13,7 +13,7 @@ using namespace parlay;
 using namespace pargeo;
 
 parlay::sequence<pargeo::dendroNode> pargeo::dendrogram(parlay::sequence<pargeo::wghEdge> &edges, size_t n) {
-  timer t; t.start();
+  //timer t; t.start();
 
   sequence<pargeo::wghEdge> edgesSorted =
     parlay::sort(make_slice(edges), [&](wghEdge e1, wghEdge e2) {
