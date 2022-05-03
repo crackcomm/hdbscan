@@ -46,7 +46,7 @@ parlay::sequence<pargeo::dendroNode> pargeo::dendrogram(parlay::sequence<pargeo:
     idx++;
   }
 
-  cout << "dendrogram-time = " << t.stop() << endl;
+  // cout << "dendrogram-time = " << t.stop() << endl;
 
   // for (auto d: dendro) {
   //   cout << get<0>(d) << " " << get<1>(d) << " ";

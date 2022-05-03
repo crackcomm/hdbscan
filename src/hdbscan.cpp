@@ -58,7 +58,7 @@ parlay::sequence<pargeo::wghEdge> pargeo::hdbscan(parlay::sequence<pargeo::point
 
   nodeT* tree = buildKdt<dim, point<dim>>(S, true, true);
 
-  cout << "build-tree-time = " << t0.get_next() << endl;
+  // cout << "build-tree-time = " << t0.get_next() << endl;
 
   // todo return distances
   sequence<size_t> nns = kdTreeKnn<dim, pointT>(S, minPts, tree, true);
@@ -68,7 +68,7 @@ parlay::sequence<pargeo::wghEdge> pargeo::hdbscan(parlay::sequence<pargeo::point
 			       coreDist[i] = S[nns[i*minPts + minPts-1]].dist(S[i]);
 			     });
 
-  cout << "core-dist-time = " << t0.get_next() << endl;
+  // cout << "core-dist-time = " << t0.get_next() << endl;
 
   sequence<floatT> cdMin = sequence<floatT>(tree->size() * 2);
   sequence<floatT> cdMax = sequence<floatT>(tree->size() * 2);
@@ -99,9 +99,9 @@ parlay::sequence<pargeo::wghEdge> pargeo::hdbscan(parlay::sequence<pargeo::point
 
     wspdTime += t0.get_next();
 
-    cout << "---" << endl;
-    cout << " beta = " << beta << endl;
-    cout << " rho = " << rhoLo << " -- " << rhoHi << endl;
+    // cout << "---" << endl;
+    // cout << " beta = " << beta << endl;
+    // cout << " rho = " << rhoLo << " -- " << rhoHi << endl;
 
     numEdges += bccps.size();
 
@@ -110,7 +110,7 @@ parlay::sequence<pargeo::wghEdge> pargeo::hdbscan(parlay::sequence<pargeo::point
       rhoLo = rhoHi;
       continue;}
 
-    cout << " edges = " << bccps.size() << endl;
+    // cout << " edges = " << bccps.size() << endl;
 
     struct wEdge {
       size_t u,v;
@@ -128,7 +128,7 @@ parlay::sequence<pargeo::wghEdge> pargeo::hdbscan(parlay::sequence<pargeo::point
       });
 
     batchKruskal(edges, S.size(), UF);
-    cout << " mst-edges = " << UF.numEdge() << endl;
+    // cout << " mst-edges = " << UF.numEdge() << endl;
     kruskalTime += t0.get_next();
 
     mark<nodeT, pointT, edgeUnionFind<long>>(tree, &UF, S.data());
@@ -148,9 +148,9 @@ parlay::sequence<pargeo::wghEdge> pargeo::hdbscan(parlay::sequence<pargeo::point
   // }
   // cout << "edge-sum = " << sum << endl;
 
-  cout << "wspd-time = " << wspdTime << endl;
-  cout << "kruskal-time = " << kruskalTime << endl;
-  cout << "mark-time = " << markTime << endl;
+  // cout << "wspd-time = " << wspdTime << endl;
+  // cout << "kruskal-time = " << kruskalTime << endl;
+  // cout << "mark-time = " << markTime << endl;
   return UF.getEdge();
 }
 
