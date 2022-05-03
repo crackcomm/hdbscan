@@ -23,11 +23,11 @@ open Bigarray
 type arr = (float, float64_elt, c_layout) Array2.t
 type edges = (int * int * float) array [@@deriving sexp]
 
-external hdbscan_graph : arr -> int -> edges = "hdbscan_graph_ml"
+external graph : arr -> int -> edges = "hdbscan_graph_ml"
 
-let hdbscan_graph ~min_pts points = hdbscan_graph points min_pts
+let graph ~min_pts points = graph points min_pts
 
-let%expect_test "hdbscan_graph" =
+let%expect_test "graph" =
   let input =
     Array2.of_array
       Float64
@@ -43,7 +43,7 @@ let%expect_test "hdbscan_graph" =
        ; [| 3.13; 3.43 |]
       |]
   in
-  let out = hdbscan_graph ~min_pts:3 input in
+  let out = graph ~min_pts:3 input in
   print_s [%sexp (out : edges)];
   (* Output from Python library. *)
   [%expect
